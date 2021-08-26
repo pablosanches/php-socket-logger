@@ -1,0 +1,22 @@
+{
+  "name": "php-socket-logger",
+  "version": "1.0.0",
+  "description": "PSR3 LoggerInterface implementation with websocket support for real-time log monitoring.",
+  "main": "sockect-server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pablosanches/php-socket-logger.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pablosanches/php-socket-logger/issues"
+  },
+  "homepage": "https://github.com/pablosanches/php-socket-logger#readme",
+  "dependencies": {
+    "socket.io": "^4.1.3"
+  }
+}

@@ -1,0 +1,23 @@
+{
+    "name": "pablosanches/php-websocket-logger",
+    "description": "PSR3 LoggerInterface implementation with websocket support for real-time log monitoring.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pablo Sanches",
+            "email": "sanches.webmaster@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^5.6|^7.0",
+        "psr/log": "^1.0",
+        "wisembly/elephant.io": "^3.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "PabloSanches\\Logger\\": "src/"
+        }
+    }
+}
