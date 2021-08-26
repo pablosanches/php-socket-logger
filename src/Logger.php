@@ -1,6 +1,6 @@
 <?php
 
-namespace PabloSanches\Logger;
+namespace PabloSanches;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
@@ -14,17 +14,18 @@ use ElephantIO\Engine\SocketIO\Version2X;
  */
 class Logger implements LoggerInterface
 {
-    const LOGGER_TOKEN = 'PABLO-TOKEN';
+    const SOCKET_TOKEN = '';
+    const SOCKET_HOST = '';
 
     private $socketClient;
 
     public function __construct()
     {
-        $this->socketClient = new Client(new Version2X('http://localhost:1337', [
+        $this->socketClient = new Client(new Version2X(self::SOCKET_HOST, [
             'headers' => [
-                'X-My-Header: SocketLogger',
-                'Authorization: Bearer ' . self::LOGGER_TOKEN,
-                'User: peter',
+                'X-My-Header: WebsocketLogger',
+                'Authorization: Bearer ' . self::SOCKET_TOKEN,
+                'User: logger',
             ]
         ]));
     }
@@ -166,7 +167,7 @@ class Logger implements LoggerInterface
             throw new InvalidArgumentException('Invalid log level');
         }
 
-        $this->emit($level . ' ' . $this->interpolate($message, $context));
+        $this->emit(mb_strtoupper($level) . ' ' . $this->interpolate($message, $context));
     }
 
     /**
@@ -181,7 +182,7 @@ class Logger implements LoggerInterface
         $replace = array();
         foreach ($context as $key => $value) {
             if (!is_array($value) && (!is_object($value) || method_exists($value, '__toString'))) {
-                $replace['{'. $value .'}'] = $value;
+                $replace['{'. $key .'}'] = $value;
             }
         }
 
@@ -198,10 +199,12 @@ class Logger implements LoggerInterface
     {
         $this->socketClient->initialize();
         
-        $this->socketClient->emit('logger_emmiter', array(
+        $data = [
             'message' => $msg,
-            'token' => self::LOGGER_TOKEN
-        ));
+            'token' => self::SOCKET_TOKEN,
+        ];
+
+        $this->socketClient->emit('logger', $data);
 
         $this->socketClient->close();
     }
