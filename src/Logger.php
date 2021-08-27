@@ -12,28 +12,10 @@ use ElephantIO\Engine\SocketIO\Version2X;
 /**
  * Implements PSR3 emitting logs per socket
  */
-class Logger implements LoggerInterface
+abstract class Logger implements LoggerInterface
 {
-    const SOCKET_TOKEN = '';
-    const SOCKET_HOST = '';
-
-    private $socketClient;
-
-    public function __construct()
-    {
-        $this->socketClient = new Client(new Version2X(self::SOCKET_HOST, [
-            'headers' => [
-                'X-My-Header: WebsocketLogger',
-                'Authorization: Bearer ' . self::SOCKET_TOKEN,
-                'User: logger',
-            ]
-        ]));
-    }
-
-    public function __destruct()
-    {
-        $this->socketClient->close();
-    }
+    const SOCKET_TOKEN = 'PABLO-TOKEN';
+    const SOCKET_HOST = 'http://localhost:1337';
 
     /**
      * System is unusable.
@@ -44,7 +26,7 @@ class Logger implements LoggerInterface
      */
     public function emergency($message, array $context = array())
     {
-        return $this->log(LogLevel::EMERGENCY, $message, $context);
+        return self::log(LogLevel::EMERGENCY, $message, $context);
     }
 
     /**
@@ -59,7 +41,7 @@ class Logger implements LoggerInterface
      */
     public function alert($message, array $context = array())
     {
-        return $this->log(LogLevel::ALERT, $message, $context);
+        return self::log(LogLevel::ALERT, $message, $context);
     }
 
     /**
@@ -73,7 +55,7 @@ class Logger implements LoggerInterface
      */
     public function critical($message, array $context = array())
     {
-        return $this->log(LogLevel::CRITICAL, $message, $context);
+        return self::log(LogLevel::CRITICAL, $message, $context);
     }
 
     /**
@@ -86,7 +68,7 @@ class Logger implements LoggerInterface
      */
     public function error($message, array $context = array())
     {
-        return $this->log(LogLevel::ERROR, $message, $context);
+        return self::log(LogLevel::ERROR, $message, $context);
     }
 
     /**
@@ -101,7 +83,7 @@ class Logger implements LoggerInterface
      */
     public function warning($message, array $context = array())
     {
-        return $this->log(LogLevel::WARNING, $message, $context);
+        return self::log(LogLevel::WARNING, $message, $context);
     }
 
     /**
@@ -113,7 +95,7 @@ class Logger implements LoggerInterface
      */
     public function notice($message, array $context = array())
     {
-        return $this->log(LogLevel::NOTICE, $message, $context);
+        return self::log(LogLevel::NOTICE, $message, $context);
     }
 
     /**
@@ -127,7 +109,7 @@ class Logger implements LoggerInterface
      */
     public function info($message, array $context = array())
     {
-        return $this->log(LogLevel::INFO, $message, $context);
+        return self::log(LogLevel::INFO, $message, $context);
     }
 
     /**
@@ -139,7 +121,7 @@ class Logger implements LoggerInterface
      */
     public function debug($message, array $context = array())
     {
-        return $this->log(LogLevel::DEBUG, $message, $context);
+        return self::log(LogLevel::DEBUG, $message, $context);
     }
 
     /**
@@ -167,7 +149,8 @@ class Logger implements LoggerInterface
             throw new InvalidArgumentException('Invalid log level');
         }
 
-        $this->emit(mb_strtoupper($level) . ' ' . $this->interpolate($message, $context));
+        $msg = mb_strtoupper($level) . ' | ' . self::interpolate($message, $context);
+        self::emit($msg, $level);
     }
 
     /**
@@ -193,19 +176,26 @@ class Logger implements LoggerInterface
      * Emit the log to socket
      *
      * @param string $msg
+     * @param string $level
      * @return void
      */
-    protected function emit($msg)
+    protected function emit($msg, $level)
     {
-        $this->socketClient->initialize();
+        $socket = new Client(new Version2X(self::SOCKET_HOST, [
+            'headers' => [
+                'X-My-Header: SocketLogger',
+                'Authorization: Bearer ' . self::SOCKET_TOKEN
+            ]
+        ]));
+
+        $socket->initialize();
         
-        $data = [
+        $socket->emit('logger_emmiter', array(
             'message' => $msg,
-            'token' => self::SOCKET_TOKEN,
-        ];
+            'level' => $level,
+            'token' => self::SOCKET_TOKEN
+        ));
 
-        $this->socketClient->emit('logger', $data);
-
-        $this->socketClient->close();
+        $socket->close();
     }
 }

@@ -1,26 +1,3 @@
-# php-socket-logger
-PSR3 LoggerInterface implementation with websocket support for real-time log monitoring.
-
-
-## Using
-
-```sh
-composer require pablosanches/php-websocket-logger
-```
-
-### PHP
-```php
-<?php
-
-require __DIR__ . '/vendor/autoload.php';
-use PabloSanches\Logger;
-
-Logger::info('Message info here - {variable}', array('variable' => 'changed'));
-Logger::critical('Message critical here - {variable}', array('variable' => 'changed'));
-```
-
-### NODEJS
-```js
 const server = require('http').createServer();
 const io = require('socket.io')(server);
 const logger = require('winston');
@@ -73,4 +50,3 @@ io.on('connection', function (socket){
 });
 
 server.listen(port);
-```

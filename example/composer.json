@@ -1,0 +1,17 @@
+{
+    "name": "pablo/php-socket-example",
+    "autoload": {
+        "psr-4": {
+            "Pablo\\PhpSocketExample\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Pablo Sanches",
+            "email": "sanches.webmaster@gmail.com"
+        }
+    ],
+    "require": {
+        "pablosanches/php-websocket-logger": "^1*"
+    }
+}
