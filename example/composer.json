@@ -12,6 +12,6 @@
         }
     ],
     "require": {
-        "pablosanches/php-websocket-logger": "^1*"
+        "pablosanches/php-websocket-logger": "^1.0"
     }
 }
