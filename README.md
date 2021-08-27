@@ -35,12 +35,6 @@ logger.remove(logger.transports.Console);
 logger.add(logger.transports.Console, { colorize: true, timestamp: true });
 logger.info('SocketIO > listening on port ' + port);
 
-// Stored tokens
-var tokens = {};
-
-// Stored users
-var users = {};
-
 // set up initialization and authorization method
 io.use(function (socket, next) {
     let auth = socket.request.headers.authorization;

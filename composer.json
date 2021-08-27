@@ -3,13 +3,15 @@
     "description": "PSR3 LoggerInterface implementation with websocket support for real-time log monitoring.",
     "type": "library",
     "license": "MIT",
+    "keywords": ["Nodejs", "WebSocket", "Real Time", "Logger", "PHP", "PSR3"],
     "authors": [
         {
             "name": "Pablo Sanches",
             "email": "sanches.webmaster@gmail.com"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": "^5.6|^7.0",
         "psr/log": "^1.0",
