@@ -1,4 +1,4 @@
-# php-socket-logger
+# PHP Websocket Logger
 PSR3 LoggerInterface implementation with websocket support for real-time log monitoring.
 
 [![Latest Stable Version](http://poser.pugx.org/pablosanches/php-websocket-logger/v)](https://packagist.org/packages/pablosanches/php-websocket-logger)
